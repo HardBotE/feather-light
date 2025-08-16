@@ -1,9 +1,8 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped
+from src.app.db.base import Base
 
 
-class Base(DeclarativeBase):
-    pass
 
 class UserToProjectTable(Base):
     __tablename__ = 'user_to_project'

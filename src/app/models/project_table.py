@@ -1,9 +1,8 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
+from src.app.db.base import Base
 
-class Base(DeclarativeBase):
-    pass
 
 class Projects(Base):
     __tablename__ = 'projects'
