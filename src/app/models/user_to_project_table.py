@@ -10,3 +10,4 @@ class UserToProjectTable(Base):
     id:Mapped[int]=mapped_column(primary_key=True,autoincrement=True)
     user_id:Mapped[int]=mapped_column(ForeignKey('users.id'))
     project_id: Mapped[int] = mapped_column(ForeignKey('projects.id'))
+    role:Mapped[str]=mapped_column()

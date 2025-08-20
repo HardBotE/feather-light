@@ -1,9 +1,8 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import mapped_column, Mapped, DeclarativeBase
+from sqlalchemy.orm import mapped_column, Mapped
 
+from src.app.db.base import Base
 
-class Base(DeclarativeBase):
-    pass
 
 class AttachmentToProject(Base):
     __tablename__ = 'attachment_to_project'
@@ -13,3 +12,4 @@ class AttachmentToProject(Base):
     project_id:Mapped[int]=mapped_column(ForeignKey('projects.id'))
     uri:Mapped[str]=mapped_column()
     name:Mapped[str]=mapped_column()
+    mimetypes: Mapped[str] = mapped_column()
