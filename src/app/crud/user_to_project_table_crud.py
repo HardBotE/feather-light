@@ -2,8 +2,8 @@ from sqlalchemy import select, func, delete
 from sqlalchemy.orm import Session, joinedload
 
 from src.app.db.db import engine
-from src.app.models.attachment_to_project_table import AttachmentToProject
-from src.app.models.project_table import Projects
+from src.app.models.attachment_to_project_table import AttachmentToProjectTable
+from src.app.models.project_table import ProjectsTable
 from src.app.models.user_to_project_table import UserToProjectTable
 from src.app.requests.project_model import ProjectSchema
 from src.app.requests.user_model import UserRoles
@@ -56,14 +56,13 @@ def validate_role(project_id:int,user_id:int,role:str):
                 UserToProjectTable.user_id == user_id,
                 UserToProjectTable.role==role
             ).first()
-            print("DEBUG validate_role:", user)
             return user is not None
 
 def get_all_projects_info(user_id:int):
     with (Session(engine) as session):
         with session.begin():
-            projects=( session.query(Projects).join(UserToProjectTable).filter(
-                UserToProjectTable.user_id==user_id).options(joinedload(Projects.attachments)).all()
+            projects=( session.query(ProjectsTable).join(UserToProjectTable).filter(
+                UserToProjectTable.user_id==user_id).options(joinedload(ProjectsTable.attachments)).all()
                        )
             schemas = [ProjectSchema.model_validate(project) for project in projects]
 

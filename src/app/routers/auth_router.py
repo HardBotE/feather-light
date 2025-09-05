@@ -1,7 +1,7 @@
-from http.client import HTTPException
+
 
 import jwt
-from fastapi import APIRouter,status,Request,Response
+from fastapi import APIRouter,status,Request,Response,HTTPException
 from starlette.responses import JSONResponse
 
 from src.app.auth.auth import decode_token, return_token

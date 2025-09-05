@@ -4,7 +4,7 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 from src.app.db.base import Base
 
 
-class AttachmentToProject(Base):
+class AttachmentToProjectTable(Base):
     __tablename__ = 'attachment_to_project'
 
     class Config:
@@ -18,5 +18,5 @@ class AttachmentToProject(Base):
     mimetype: Mapped[str] = mapped_column()
     key:Mapped[str]=mapped_column()
 
-    project = relationship("Projects", back_populates="attachments")
+    project = relationship("ProjectsTable", back_populates="attachments")
 

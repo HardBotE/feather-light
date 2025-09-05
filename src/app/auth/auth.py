@@ -8,7 +8,7 @@ import jwt
 from fastapi import HTTPException
 
 from src.app.db.db import engine
-from src.app.models.user_table import Users
+from src.app.models.user_table import UsersTable
 from src.app.requests.user_model import LoginUserModel
 
 
@@ -30,7 +30,7 @@ def decode_token(token):
 def return_token(credentials:LoginUserModel):
     with Session(engine) as session:
         with session.begin():
-            user=session.query(Users).filter(Users.email==credentials.email).first()
+            user=session.query(UsersTable).filter(UsersTable.email==credentials.email).first()
             if not user:
                 raise HTTPException(401,'No user with the given email address.')
 

@@ -1,7 +1,7 @@
 import asyncio
 import datetime
 import time
-from http.client import HTTPException
+from fastapi import HTTPException
 
 from fastapi import File, UploadFile
 import moto

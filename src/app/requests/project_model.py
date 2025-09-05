@@ -11,6 +11,7 @@ class ProjectOut(BaseModel):
     description:str
 
 class ProjectCreate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     name:str
     description:str
 

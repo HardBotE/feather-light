@@ -6,9 +6,9 @@ import os
 from sqlalchemy import create_engine
 
 from src.app.db.base import Base
-from src.app.models.user_table import Users
-from src.app.models.project_table import Projects
-from src.app.models.attachment_to_project_table import AttachmentToProject
+from src.app.models.user_table import UsersTable
+from src.app.models.project_table import ProjectsTable
+from src.app.models.attachment_to_project_table import AttachmentToProjectTable
 from src.app.models.user_to_project_table import UserToProjectTable
 
 DATABASE_URL = (f"postgresql+psycopg2://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@"
