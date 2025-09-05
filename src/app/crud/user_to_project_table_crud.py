@@ -1,7 +1,11 @@
-from sqlalchemy.orm import Session
+from sqlalchemy import select, func, delete
+from sqlalchemy.orm import Session, joinedload
 
 from src.app.db.db import engine
+from src.app.models.attachment_to_project_table import AttachmentToProject
+from src.app.models.project_table import Projects
 from src.app.models.user_to_project_table import UserToProjectTable
+from src.app.requests.project_model import ProjectSchema
 from src.app.requests.user_model import UserRoles
 from src.app.requests.user_to_project_model import CreateUserToProjectRole
 
@@ -13,7 +17,7 @@ def create_user_for_project(session: Session,data:CreateUserToProjectRole):
         role=data.role,
     )
     session.add(new_data)
-    session.commit()
+
     return new_data
 
 def update_user_from_project(object_id,data):
@@ -44,12 +48,35 @@ def get_all_projects_for_user(user_id):
                 session.query(UserToProjectTable).filter(UserToProjectTable.user_id==user_id).all()
             }
 
-def validate_role(project_id:int,user_id:int,role:UserRoles):
+def validate_role(project_id:int,user_id:int,role:str):
     with Session(engine) as session:
         with session.begin():
             user = session.query(UserToProjectTable).filter(
-                UserToProjectTable.id == project_id,
+                UserToProjectTable.project_id == project_id,
                 UserToProjectTable.user_id == user_id,
-                UserToProjectTable.role==role.value
+                UserToProjectTable.role==role
             ).first()
+            print("DEBUG validate_role:", user)
             return user is not None
+
+def get_all_projects_info(user_id:int):
+    with (Session(engine) as session):
+        with session.begin():
+            projects=( session.query(Projects).join(UserToProjectTable).filter(
+                UserToProjectTable.user_id==user_id).options(joinedload(Projects.attachments)).all()
+                       )
+            schemas = [ProjectSchema.model_validate(project) for project in projects]
+
+            return schemas
+
+def delete_all_participants(project_id:int):
+    with (Session(engine) as session):
+        with session.begin():
+            session.execute(delete(UserToProjectTable).where(
+                UserToProjectTable.role==UserRoles.PARTICIPANT.value,UserToProjectTable.project_id==project_id))
+
+def delete_all_owners(project_id:int):
+    with (Session(engine) as session):
+        with session.begin():
+            session.execute(delete(UserToProjectTable).where(
+                UserToProjectTable.role==UserRoles.OWNER.value,UserToProjectTable.project_id==project_id))
