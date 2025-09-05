@@ -46,7 +46,7 @@ async def update_document(document_id:int,user_id:int=Depends(get_user),file: Up
     key=document.key
     mime = file.content_type
 
-    is_participant = validate_role(project_id, user_id, role=UserRoles.PARTICIPANT) and document.user_id==user_id
+    is_participant = validate_role(project_id, user_id, role=UserRoles.PARTICIPANT.value) and document.user_id==user_id
     is_owner = validate_role(project_id, user_id, role=UserRoles.OWNER.value)
 
     if not is_participant and not is_owner:

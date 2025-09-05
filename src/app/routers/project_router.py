@@ -15,7 +15,8 @@ from src.app.crud.user_to_project_table_crud import validate_role, create_user_f
     delete_all_participants, delete_all_owners
 from src.app.db.db import engine
 from src.app.models.user_to_project_table import UserToProjectTable
-from src.app.requests.attachment_to_project_model import AttachmentToProject, AttachmentToProjectUpload
+from src.app.requests.attachment_to_project_model import AttachmentToProject, AttachmentToProjectUpload, \
+    AttachmentToProjectReturn
 from src.app.requests.project_model import ProjectCreate, ProjectOut, ProjectSchema
 from src.app.requests.user_model import UserRoles
 from src.app.requests.user_to_project_model import CreateUserToProjectRole
@@ -89,7 +90,7 @@ def return_documents(project_id,user_id:int=Depends(get_user)):
 
     documents=get_all_attachments(project_id)
 
-    return {"message":"successfully retrieved data","documents":documents}
+    return {"message":"successfully retrieved data","documents":[AttachmentToProjectReturn.model_validate(document) for document in documents]}
 
 @project_router.post('/{project_id}/documents',status_code=201)
 async def upload_file(project_id: int,file: UploadFile=File(...),user_id:int=Depends(get_user)):
@@ -99,7 +100,7 @@ async def upload_file(project_id: int,file: UploadFile=File(...),user_id:int=Dep
     is_owner = validate_role(project_id, user_id, UserRoles.OWNER.value)
     is_participant = validate_role(project_id, user_id, UserRoles.PARTICIPANT.value)
 
-    if not is_owner and not is_participant:
+    if not (is_owner or is_participant):
         raise HTTPException(403,'Unauthorized')
 
     try:
@@ -139,6 +140,14 @@ def invite_user_to_project(project_id,user:str=Query(...,description='The email 
 
     if not invited_user:
         raise HTTPException(404, "User Not Found")
+
+    if invited_user==sender_id:
+        raise HTTPException(403,'Owner cannot invite him/her self')
+
+    user_already_added=validate_role(project_id,invited_user,UserRoles.PARTICIPANT.value)
+
+    if user_already_added:
+        raise HTTPException(409,'User Already Added')
 
     try:
         with Session(engine) as session:

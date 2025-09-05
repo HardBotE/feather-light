@@ -56,6 +56,7 @@ def validate_role(project_id:int,user_id:int,role:str):
                 UserToProjectTable.user_id == user_id,
                 UserToProjectTable.role==role
             ).first()
+
             return user is not None
 
 def get_all_projects_info(user_id:int):

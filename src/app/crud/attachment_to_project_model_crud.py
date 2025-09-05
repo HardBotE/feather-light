@@ -33,7 +33,8 @@ def get_attachment_to_project(object_id):
     with Session(engine) as session:
         with session.begin():
             document=session.query(AttachmentToProjectTable).filter(AttachmentToProjectTable.id == object_id).first()
-            attachment_object:AttachmentToProjectReturn = AttachmentToProjectReturn(user_id=document.user_id,
+            attachment_object:AttachmentToProjectReturn = AttachmentToProjectReturn(id=document.id,
+                                                                                    user_id=document.user_id,
                                                                                     project_id=document.project_id,
                                                                                     uri=document.uri,
                                                                                     mimetype=document.mimetype,
@@ -53,4 +54,6 @@ def get_all_attachment_id(project_id):
 def get_all_attachments(project_id):
     with Session(engine) as session:
         with session.begin():
-            return session.query(AttachmentToProjectTable).filter_by(project_id=project_id).all()
+            documents= session.query(AttachmentToProjectTable).filter_by(project_id=project_id).all()
+            return_object=[AttachmentToProjectReturn.model_validate(r,from_attributes=True) for r in documents]
+            return return_object
