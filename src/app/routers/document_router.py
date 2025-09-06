@@ -41,7 +41,7 @@ def download_document(document_id: int, user_id: int = Depends(get_user)):
     return {"message": "The download link is viable for 5 minutes", "link": link}
 
 
-@document_router.put("/{document_id}",status_code=200)
+@document_router.put("/{document_id}", status_code=200)
 def update_document(
     document_id: int, user_id: int = Depends(get_user), file: UploadFile = File(...)
 ):
@@ -55,7 +55,9 @@ def update_document(
     mime = file.content_type
 
     if not (
-        check_project_permission(project_id=project_id, user_id=user_id,role=[UserRoles.OWNER.value])
+        check_project_permission(
+            project_id=project_id, user_id=user_id, role=[UserRoles.OWNER.value]
+        )
         or document.user_id == user_id
     ):
         raise HTTPException(403, "Unauthorized")
@@ -73,7 +75,7 @@ def update_document(
     return {"message": "document_updated"}
 
 
-@document_router.delete("/{document_id}",status_code=204)
+@document_router.delete("/{document_id}", status_code=204)
 def delete_document(document_id: int, user_id: int = Depends(get_user)):
     document: AttachmentToProjectReturn = get_attachment_to_project(document_id)
 
@@ -84,7 +86,9 @@ def delete_document(document_id: int, user_id: int = Depends(get_user)):
     key = document.key
 
     if not (
-        check_project_permission(project_id=project_id, user_id=user_id,role=[UserRoles.OWNER.value])
+        check_project_permission(
+            project_id=project_id, user_id=user_id, role=[UserRoles.OWNER.value]
+        )
         or document.user_id == user_id
     ):
         raise HTTPException(403, "Unauthorized")

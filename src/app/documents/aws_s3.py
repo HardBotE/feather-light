@@ -62,7 +62,10 @@ def download_mock(key):
 def update_mock(key, mime, file: File()):
     s3 = boto3.client("s3", region_name=os.getenv("AWS_DEFAULT_REGION"))
     s3.upload_fileobj(
-        file.file, os.getenv("S3_BUCKET"), key, ExtraArgs={"ContentType": mime,"Metadata":{"name":file.filename}},
+        file.file,
+        os.getenv("S3_BUCKET"),
+        key,
+        ExtraArgs={"ContentType": mime, "Metadata": {"name": file.filename}},
     )
 
 
