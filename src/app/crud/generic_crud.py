@@ -1,9 +1,3 @@
-import os
-from typing import TypeVar, Generic
-
-from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
 """
 TODO ASK OPINION
 T=TypeVar('T')

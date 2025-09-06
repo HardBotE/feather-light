@@ -6,14 +6,16 @@ from src.app.requests.attachment_to_project_model import AttachmentToProjectRetu
 
 
 class ProjectOut(BaseModel):
-    id:int
-    name:str
-    description:str
+    id: int
+    name: str
+    description: str
+
 
 class ProjectCreate(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    name:str
-    description:str
+    name: str
+    description: str
+
 
 class ProjectSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -23,4 +25,3 @@ class ProjectSchema(BaseModel):
     description: str
     # noinspection PyDataclass
     attachments: List[AttachmentToProjectReturn] = Field(default_factory=list)
-

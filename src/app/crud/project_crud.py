@@ -4,8 +4,7 @@ from sqlalchemy.orm import Session
 
 from src.app.db.db import engine
 from src.app.models.project_table import ProjectsTable
-from src.app.models.user_to_project_table import UserToProjectTable
-from src.app.requests.project_model import  ProjectCreate
+from src.app.requests.project_model import ProjectCreate
 
 
 def create_project(session: Session, data: ProjectCreate):
@@ -14,7 +13,8 @@ def create_project(session: Session, data: ProjectCreate):
     session.flush()
     return obj
 
-def update_project(project_id,data):
+
+def update_project(project_id, data):
     with Session(engine) as session:
         payload = data.model_dump(exclude_unset=True, exclude_none=True)
 
@@ -22,17 +22,36 @@ def update_project(project_id,data):
             return None
 
         with session.begin():
-            session.query(ProjectsTable).filter(ProjectsTable.id==project_id).update(payload)
+            session.query(ProjectsTable).filter(ProjectsTable.id == project_id).update(
+                payload
+            )
+
 
 def delete_project(project_id):
     with Session(engine) as session:
         with session.begin():
-            session.query(ProjectsTable).filter(ProjectsTable.id==project_id).delete()
+            session.query(ProjectsTable).filter(ProjectsTable.id == project_id).delete()
 
-def get_project(project_id:int):
+
+def get_project(project_id: int):
     with Session(engine) as session:
-            data=session.get(ProjectsTable,project_id)
-            if not data:
-                raise HTTPException(404, "Project not found")
-            return {"project_id":data.id,"name":data.name,"description":data.description}
+        data = session.get(ProjectsTable, project_id)
+        if not data:
+            raise HTTPException(404, "Project not found")
+        return {
+            "project_id": data.id,
+            "name": data.name,
+            "description": data.description,
+        }
 
+
+def project_exists(project_id):
+    with Session(engine) as session:
+        with session.begin():
+            project = (
+                session.query(ProjectsTable)
+                .filter(ProjectsTable.id == project_id)
+                .first()
+            )
+
+            return project is not None
