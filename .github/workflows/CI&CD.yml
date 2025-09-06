@@ -38,6 +38,12 @@ jobs:
           pipx install poetry
           poetry install
       - name: Run tests
+        env:
+          DB_USERNAME: writing
+          DB_PASSWORD: placeholders
+          DB_NAME: so_no_error
+          DB_HOST: occurs
+          DB_PORT: 5432
         run: poetry run python -m unittest discover -s tests -p "*_test.py"
 
 
