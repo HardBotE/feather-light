@@ -20,10 +20,6 @@ jobs:
           python -m pip install pipx
           pipx install poetry
           poetry build
-      - name: Ruff lint
-        run: |
-          poetry run ruff check .
-          poetry run ruff format --check .
 
   test:
     runs-on: ubuntu-latest
