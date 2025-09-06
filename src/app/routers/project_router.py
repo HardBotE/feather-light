@@ -170,7 +170,7 @@ def invite_user_to_project(
 
     if not (
         check_project_permission(
-            project_id=project_id, user_id=sender_id, role=UserRoles.OWNER.value
+            project_id=project_id, user_id=sender_id, role=[UserRoles.OWNER.value]
         )
     ):
         raise HTTPException(403, "Unauthorized")
@@ -184,7 +184,7 @@ def invite_user_to_project(
         raise HTTPException(403, "Owner cannot invite him/her self")
 
     user_already_added = validate_role(
-        project_id, invited_user, UserRoles.PARTICIPANT.value
+        project_id=project_id, user_id=invited_user, role=[UserRoles.PARTICIPANT.value]
     )
 
     if user_already_added:
@@ -212,7 +212,7 @@ def call_delete_project(project_id: int, user_id: int = Depends(get_user)):
 
     if not (
         check_project_permission(
-            project_id=project_id, user_id=user_id, role=UserRoles.OWNER.value
+            project_id=project_id, user_id=user_id, role=[UserRoles.OWNER.value]
         )
     ):
         raise HTTPException(403, "Unauthorized")
