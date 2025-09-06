@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 
 from src.app.db.db import start_db
@@ -8,7 +10,8 @@ from src.app.routers.project_router import projects_router
 
 app = FastAPI()
 
-start_db()
+if not os.getenv("TESTING"):
+    start_db()
 app.include_router(auth_router)
 app.include_router(project_router)
 app.include_router(projects_router)
