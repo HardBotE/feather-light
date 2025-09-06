@@ -11,6 +11,9 @@ DATABASE_URL = (
     f"{os.getenv('DB_HOST', 'db')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
 )
 
+if os.getenv("TESTING") == "1":
+    DATABASE_URL = "sqlite+pysqlite:///:memory:"
+
 engine = create_engine(DATABASE_URL)
 
 
