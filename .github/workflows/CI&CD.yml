@@ -70,7 +70,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           source: ".env"
-          target: "/home/ubuntu/app/.env"
+          target: "/home/ubuntu/app/"
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v1.2.0
