@@ -38,7 +38,7 @@ def download_document(document_id: int, user_id: int = Depends(get_user)):
     if not link:
         raise HTTPException(404, "Unable to download document")
 
-    return {"message": "The download link is viable for 5 minutes", "link": link}
+    return {"message": "The download link is viable for one hour", "link": link}
 
 
 @document_router.put("/{document_id}", status_code=200)

@@ -54,7 +54,7 @@ def download_mock(key):
     url = s3.generate_presigned_url(
         "get_object",
         Params={"Bucket": os.getenv("S3_BUCKET"), "Key": key},
-        ExpiresIn=300,
+        ExpiresIn=3600,
     )
     return {"url": url}
 
